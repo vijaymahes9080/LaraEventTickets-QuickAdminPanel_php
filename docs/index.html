@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaraEventTickets - Sell Tickets and Manage Events in Style</title>
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS resets and custom variables */
+        :root {
+            --bg-color: #0b0e17;
+            --primary: hsl(250, 85%, 65%);
+            --primary-glow: hsla(250, 85%, 65%, 0.15);
+            --secondary: hsl(315, 90%, 60%);
+            --secondary-glow: hsla(315, 90%, 60%, 0.15);
+            --accent: hsl(190, 90%, 55%);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --glass-bg: rgba(17, 24, 39, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* Container helper */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(11, 14, 23, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.2rem 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 0.8rem 0;
+            background: rgba(11, 14, 23, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .btn-github {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 99px;
+            border: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .btn-github:hover {
+            background: #fff;
+            color: var(--bg-color) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 6rem 0;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            line-height: 1.15;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1.5px;
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(135deg, var(--primary) 20%, var(--secondary) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 540px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            text-decoration: none;
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: var(--font-display);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Floating Screen Wrapper */
+        .hero-image-wrapper {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .mockup-frame {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
+                        0 0 40px var(--primary-glow);
+            transform: rotateY(-10deg) rotateX(10deg);
+            transition: var(--transition);
+        }
+
+        .mockup-frame:hover {
+            transform: rotateY(-2deg) rotateX(2deg) scale(1.02);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 
+                        0 0 60px rgba(236, 72, 153, 0.2);
+        }
+
+        .mockup-frame img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Features Section */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 
+                        0 0 20px var(--primary-glow);
+        }
+
+        .feature-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Product Gallery Showcase */
+        .gallery {
+            padding: 6rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .gallery-item h3 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .gallery-item p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-img-container {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+        }
+
+        .gallery-img-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .gallery-img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Installation Console */
+        .installation {
+            padding: 6rem 0;
+        }
+
+        .console {
+            background: #06080e;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .console-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .console-title {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .console-body {
+            color: #4ade80;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .command-line {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cmd-input {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cmd-prompt {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .cmd-comment {
+            color: #6b7280;
+            margin-bottom: 0.2rem;
+        }
+
+        .cmd-output {
+            color: var(--text-muted);
+            margin-left: 1.5rem;
+            margin-top: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #06080e;
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 0;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        footer h2 {
+            font-family: var(--font-display);
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .copyright {
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Layouts */
+        @media (max-width: 968px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-text p {
+                margin: 0 auto 2rem auto;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .mockup-frame {
+                transform: none;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .mockup-frame:hover {
+                transform: scale(1.02);
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links {
+                display: none; /* simple mobile hide */
+            }
+
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header id="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="#" class="logo">🎟️ <span>LaraEventTickets</span></a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#previews">Previews</a></li>
+                    <li><a href="#setup">Setup</a></li>
+                    <li><a href="https://github.com/vijaymahes9080/LaraEventTickets-QuickAdminPanel_php.git" class="btn-github" target="_blank">View on GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-text">
+                    <h1>Manage & Sell Tickets in <span>Absolute Style</span></h1>
+                    <p>LaraEventTickets is a premium Laravel-powered platform for event organizers to handle bookings, process secure payments, and manage events through a beautifully responsive dashboard.</p>
+                    <div class="hero-cta">
+                        <a href="https://github.com/vijaymahes9080/LaraEventTickets-QuickAdminPanel_php.git" class="btn-primary" target="_blank">Clone Repository 🚀</a>
+                        <a href="#setup" class="btn-secondary">Get Started Instructions</a>
+                    </div>
+                </div>
+                <div class="hero-image-wrapper">
+                    <div class="mockup-frame">
+                        <img src="images/dashboard_mockup.png" alt="LaraEventTickets Dashboard Mockup">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Exceptional Features</h2>
+                <p>Designed to be robust, modern, and completely simple to launch and customize for your client events.</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🎟️</div>
+                    <h3>Ticketing Tiers</h3>
+                    <p>Create multiple ticket variants per event, specifying limits, custom pricing options, and date availability ranges.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Stripe Integration</h3>
+                    <p>Configured out of the box with Stripe cashier integration to securely authorize payments and capture orders instantly.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Admin Panel</h3>
+                    <p>Leverage the QuickAdminPanel system for event dashboard configurations, role delegations, and permission settings.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Deployment</h3>
+                    <p>Pre-seeded seeders and simple environment configurations guarantee that your platform goes live in under 5 minutes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery / Preview Showcase -->
+    <section class="gallery" id="previews">
+        <div class="container">
+            <div class="section-header">
+                <h2>Stunning Visual Design</h2>
+                <p>An interface crafted to provide the maximum visual elegance and clarity on both desktop monitors and mobile devices.</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <!-- Item 1 -->
+                <div class="gallery-item">
+                    <h3>Interactive Admin Panel</h3>
+                    <p>Track metrics, view real-time payments, list events, create categories, and moderate users from a sleek, centralized control dashboard.</p>
+                    <div class="gallery-img-container">
+                        <img src="images/dashboard_mockup.png" alt="Event Dashboard Mockup">
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="gallery-item">
+                    <h3>Digital Mobile Ticket</h3>
+                    <p>Send users creative ticket designs containing unique transaction barcodes, venue directions, and dynamic event specifications.</p>
+                    <div class="gallery-img-container">
+                        <img src="images/mobile_ticket.png" alt="Mobile Ticket Design Mockup">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation / CLI Section -->
+    <section class="installation" id="setup">
+        <div class="container">
+            <div class="section-header">
+                <h2>Quick Terminal Setup</h2>
+                <p>Run these commands locally on your machine to get the repository up and running with pre-seeded mockup data.</p>
+            </div>
+            
+            <div class="console">
+                <div class="console-header">
+                    <div class="dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                    <div class="console-title">bash - laraeventtickets-setup.sh</div>
+                    <div></div>
+                </div>
+                <div class="console-body">
+                    <div class="command-line">
+                        <div class="cmd-comment"># 1. Clone the project and change directory</div>
+                        <div class="cmd-input"><span class="cmd-prompt">$</span> git clone https://github.com/vijaymahes9080/LaraEventTickets-QuickAdminPanel_php.git</div>
+                        <div class="cmd-input"><span class="cmd-prompt">$</span> cd LaraEventTickets-QuickAdminPanel</div>
+                    </div>
+                    <div class="command-line">
+                        <div class="cmd-comment"># 2. Duplicate env template and configure database parameters</div>
+                        <div class="cmd-input"><span class="cmd-prompt">$</span> cp .env.example .env</div>
+                    </div>
+                    <div class="command-line">
+                        <div class="cmd-comment"># 3. Pull all package dependencies</div>
+                        <div class="cmd-input"><span class="cmd-prompt">$</span> composer install</div>
+                    </div>
+                    <div class="command-line">
+                        <div class="cmd-comment"># 4. Generate app security key, migrate and load seeders</div>
+                        <div class="cmd-input"><span class="cmd-prompt">$</span> php artisan key:generate</div>
+                        <div class="cmd-input"><span class="cmd-prompt">$</span> php artisan migrate --seed</div>
+                    </div>
+                    <div class="command-line">
+                        <div class="cmd-comment"># 5. Serve it locally</div>
+                        <div class="cmd-input"><span class="cmd-prompt">$</span> php artisan serve</div>
+                        <div class="cmd-output">Laravel development server started: http://127.0.0.1:8000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <h2>LaraEventTickets</h2>
+            <p>A beautiful open-source project by Vijay Mahes.</p>
+            <ul class="footer-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#previews">Previews</a></li>
+                <li><a href="#setup">Setup Instructions</a></li>
+                <li><a href="https://github.com/vijaymahes9080/LaraEventTickets-QuickAdminPanel_php.git" target="_blank">GitHub Repository</a></li>
+            </ul>
+            <div class="copyright">
+                <p>&copy; 2026 Vijay Mahes (vijaymahes9080). MIT License. Built with ❤️ on Laravel.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Micro interactions -->
+    <script>
+        // Header scroll handler
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
