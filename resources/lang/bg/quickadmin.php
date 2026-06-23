@@ -8,5 +8,5 @@ return [
 		'tickets' => [		'title' => 'Tickets',		'created_at' => 'Time',		'fields' => [			'event' => 'Event id',			'title' => 'Title',			'amount' => 'Amount',			'available-from' => 'Available from',			'available-to' => 'Available to',			'price' => 'Price',		],	],
 		'payments' => [		'title' => 'Payments',		'created_at' => 'Time',		'fields' => [			'email' => 'Email',			'merchant' => 'Merchant',			'amount' => 'Amount',		],	],
 	'custom_controller_index' => 'Персонализиран контролер.',
-	'quickadmin_title' => 'Event Management',
+	'quickadmin_title' => 'LaraEventTickets',
 ];

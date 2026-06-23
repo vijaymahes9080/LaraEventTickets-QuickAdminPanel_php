@@ -21,5 +21,5 @@ return [
 	'qa_back_to_list' => 'Voltar',
 	'qa_dashboard' => 'Painel',
 	'qa_delete' => 'Excluir',
-	'quickadmin_title' => 'Event Management',
+	'quickadmin_title' => 'LaraEventTickets',
 ];

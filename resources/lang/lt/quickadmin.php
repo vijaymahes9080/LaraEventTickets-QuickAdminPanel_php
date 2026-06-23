@@ -21,5 +21,5 @@ return [
 	'qa_back_to_list' => 'Grįžti į sąrašą',
 	'qa_dashboard' => 'Pagrindinis',
 	'qa_delete' => 'Trinti',
-	'quickadmin_title' => 'Event Management',
+	'quickadmin_title' => 'LaraEventTickets',
 ];

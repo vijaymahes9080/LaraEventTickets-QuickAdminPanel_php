@@ -21,5 +21,5 @@ return [
 	'qa_back_to_list' => 'Listeye dön',
 	'qa_dashboard' => 'Kontrol Paneli',
 	'qa_delete' => 'Sil',
-	'quickadmin_title' => 'Event Management',
+	'quickadmin_title' => 'LaraEventTickets',
 ];
