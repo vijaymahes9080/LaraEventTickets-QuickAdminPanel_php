@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaraEventTickets Admin - Control Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">LaraAdmin</span>
+                </a>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" id="nav-dash">
+                    <a href="#">
+                        <span class="icon">📊</span>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item" id="nav-events">
+                    <a href="#">
+                        <span class="icon">📅</span>
+                        <span class="text">Manage Events</span>
+                    </a>
+                </li>
+                <li class="menu-item" id="nav-tickets">
+                    <a href="#">
+                        <span class="icon">🎫</span>
+                        <span class="text">Ticket Tiers</span>
+                    </a>
+                </li>
+                <li class="menu-item" id="nav-payments">
+                    <a href="#">
+                        <span class="icon">💳</span>
+                        <span class="text">Payment Logs</span>
+                    </a>
+                </li>
+                <li class="menu-item" style="margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                    <a href="#" id="btn-logout" style="color: var(--danger);">
+                        <span class="icon">🚪</span>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            
+            <!-- Top Dashboard Header -->
+            <div class="top-bar">
+                <div>
+                    <h1 style="font-size: 1.8rem; font-weight: 800;">Control Panel</h1>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">LaraEventTickets Management Center</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">admin@admin.com</span>
+                    <span style="background: var(--success-light); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700;">Administrator</span>
+                </div>
+            </div>
+
+            <!-- Tab 1: Dashboard Overview -->
+            <section id="dash-overview">
+                <div class="dash-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <label>Total Revenue</label>
+                            <h2 id="metric-revenue">0.00 €</h2>
+                        </div>
+                        <div class="stat-icon-wrapper success">💰</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <label>Tickets Sold</label>
+                            <h2 id="metric-sold">0</h2>
+                        </div>
+                        <div class="stat-icon-wrapper">🎫</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <label>Active Events</label>
+                            <h2 id="metric-events">0</h2>
+                        </div>
+                        <div class="stat-icon-wrapper">📅</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <label>Successful Orders</label>
+                            <h2 id="metric-sales-count">0</h2>
+                        </div>
+                        <div class="stat-icon-wrapper success">✅</div>
+                    </div>
+                </div>
+
+                <div class="data-panel">
+                    <div class="panel-header">
+                        <h2 style="font-size: 1.25rem; font-weight: 700;">Recent Sales & Checkout Activities</h2>
+                    </div>
+                    <div class="custom-table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Attendee Email</th>
+                                    <th>Event Name</th>
+                                    <th>Items Ordered</th>
+                                    <th>Total Paid</th>
+                                </tr>
+                            </thead>
+                            <tbody id="metrics-payment-logs">
+                                <!-- Dynamic logs -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 2: Manage Events CRUD -->
+            <section id="dash-events" style="display: none;">
+                <div class="data-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 style="font-size: 1.25rem; font-weight: 700;">Events Database</h2>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Create, edit, and delete event items live</p>
+                        </div>
+                        <button class="btn-primary btn-sm" onclick="openAddEventModal()">+ Add New Event</button>
+                    </div>
+                    <div class="custom-table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Event Title</th>
+                                    <th>Location / Venue</th>
+                                    <th>Start Date & Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-table-body">
+                                <!-- Dynamic Events -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 3: Manage Tickets CRUD -->
+            <section id="dash-tickets" style="display: none;">
+                <div class="data-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 style="font-size: 1.25rem; font-weight: 700;">Ticket Pricing Tiers</h2>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Set up prices and available stock per event</p>
+                        </div>
+                        <button class="btn-primary btn-sm" onclick="openAddTicketModal()">+ Add Pricing Tier</button>
+                    </div>
+                    <div class="custom-table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tier Name</th>
+                                    <th>Associated Event</th>
+                                    <th>Price (€)</th>
+                                    <th>Sales Progress</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tickets-table-body">
+                                <!-- Dynamic Tickets -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 4: Payments Logs -->
+            <section id="dash-payments" style="display: none;">
+                <div class="data-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 style="font-size: 1.25rem; font-weight: 700;">Complete Payments Audit Log</h2>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Audit log for Stripe payments made by users</p>
+                        </div>
+                    </div>
+                    <div class="custom-table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Timestamp</th>
+                                    <th>Attendee Email</th>
+                                    <th>Event</th>
+                                    <th>Ticket details</th>
+                                    <th>Amount Paid</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payments-table-body">
+                                <!-- Dynamic Payments -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Event Add/Edit Modal -->
+    <div id="event-crud-modal" class="modal">
+        <div class="modal-backdrop" onclick="closeModals()"></div>
+        <div class="modal-content" style="max-width: 550px;">
+            <button class="modal-close" onclick="closeModals()">&times;</button>
+            <div class="modal-body">
+                <h2 id="event-modal-title" style="margin-bottom: 1.5rem;">Add Event</h2>
+                
+                <form id="event-crud-form" onsubmit="handleEventFormSubmit(event)">
+                    <input type="hidden" id="event-form-id">
+                    
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="event-form-title">Event Title *</label>
+                        <input type="text" id="event-form-title" class="form-control" placeholder="e.g. Developer Hackathon 2026" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="event-form-desc">Description</label>
+                        <textarea id="event-form-desc" class="form-control" rows="4" placeholder="Brief event description..."></textarea>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="event-form-venue">Venue / Location *</label>
+                        <input type="text" id="event-form-venue" class="form-control" placeholder="e.g. City Conference Hall" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="event-form-time">Start Time *</label>
+                        <input type="datetime-local" id="event-form-time" class="form-control" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label for="event-form-image">Banner Image URL</label>
+                        <input type="url" id="event-form-image" class="form-control" placeholder="https://example.com/banner.jpg">
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                        <span>Save Event</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Add/Edit Modal -->
+    <div id="ticket-crud-modal" class="modal">
+        <div class="modal-backdrop" onclick="closeModals()"></div>
+        <div class="modal-content" style="max-width: 500px;">
+            <button class="modal-close" onclick="closeModals()">&times;</button>
+            <div class="modal-body">
+                <h2 id="ticket-modal-title" style="margin-bottom: 1.5rem;">Add Ticket Tier</h2>
+                
+                <form id="ticket-crud-form" onsubmit="handleTicketFormSubmit(event)">
+                    <input type="hidden" id="ticket-form-id">
+                    
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="ticket-form-event">Select Event *</label>
+                        <select id="ticket-form-event" class="form-control" required></select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="ticket-form-title">Tier Name / Title *</label>
+                        <input type="text" id="ticket-form-title" class="form-control" placeholder="e.g. VIP Backstage" required>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="ticket-form-price">Price (€) *</label>
+                            <input type="number" id="ticket-form-price" class="form-control" step="0.01" min="0" placeholder="49.99" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label for="ticket-form-amount">Total Available Tickets *</label>
+                            <input type="number" id="ticket-form-amount" class="form-control" min="1" placeholder="100" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                        <span>Save Ticket Tier</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initAdminDashboard();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaraEventTickets - Modern Event Ticketing Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header / Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🎟️</span>
+                <span>LaraEventTickets</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#events" class="nav-link">Explore Events</a></li>
+                <li><a href="#" class="btn-login" onclick="openLoginModal()">Admin Panel</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">Discover & Experience</span>
+            <h1 class="hero-title">Seamless Ticketing for Exceptional Events</h1>
+            <p class="hero-desc">Secure your spot at the most exclusive summits, concerts, and startup events. Real-time booking, instant digital wallet tickets, and hassle-free payments.</p>
+            <a href="#events" class="btn-primary">
+                <span>Browse Live Events</span>
+                <span>👇</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="container">
+        <h2 class="section-title">Upcoming Featured Events</h2>
+        <p class="section-subtitle">Reserve tickets now before they sell out. Real-time availability shown below.</p>
+        <div class="events-grid" id="events-container">
+            <!-- Events rendered dynamically via app.js -->
+        </div>
+    </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-body">
+                <h2 id="checkout-title" style="margin-bottom: 0.5rem;">Event Title</h2>
+                <p id="checkout-desc" style="color: var(--text-muted); margin-bottom: 1.5rem;">Event Venue and Time</p>
+                
+                <!-- Ticket Purchase State -->
+                <div id="checkout-form-sec">
+                    <form id="payment-form" onsubmit="handlePaymentSubmit(event)">
+                        <div class="checkout-grid">
+                            <!-- Left: Select Tickets -->
+                            <div>
+                                <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">Select Tickets</h3>
+                                <div class="ticket-selector" id="ticket-selector-container">
+                                    <!-- Dynamic ticket categories -->
+                                </div>
+                            </div>
+                            
+                            <!-- Right: Contact & Card Details -->
+                            <div class="payment-details">
+                                <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">Payment Details</h3>
+                                
+                                <div class="form-group">
+                                    <label for="checkout-email">Email Address</label>
+                                    <input type="email" id="checkout-email" class="form-control" placeholder="your@email.com" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Credit / Debit Card</label>
+                                    <div class="card-input-container">
+                                        <span style="font-size: 1.1rem;">💳</span>
+                                        <input type="text" id="card-number" placeholder="4242 4242 4242 4242" maxlength="19" required oninput="this.value = this.value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim()">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; gap: 1rem;">
+                                    <div class="form-group" style="flex: 1;">
+                                        <label for="card-expiry">Expiry Date</label>
+                                        <input type="text" id="card-expiry" class="form-control" placeholder="MM/YY" maxlength="5" required>
+                                    </div>
+                                    <div class="form-group" style="flex: 1;">
+                                        <label for="card-cvc">CVC</label>
+                                        <input type="text" id="card-cvc" class="form-control" placeholder="123" maxlength="4" required>
+                                    </div>
+                                </div>
+
+                                <div class="summary-card">
+                                    <div id="summary-items">
+                                        <!-- Selected items summary -->
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span>Total Price</span>
+                                        <span id="summary-total-val">0.00 €</span>
+                                    </div>
+                                </div>
+
+                                <div id="card-errors" class="alert alert-danger" style="display: none; padding: 0.8rem; font-size: 0.85rem;"></div>
+
+                                <button type="submit" class="btn-primary" id="btn-pay-now" style="width: 100%; justify-content: center; margin-top: 0.5rem;" disabled>
+                                    <span>Pay and Get Tickets</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Success State / Wallet Ticket Stub -->
+                <div id="checkout-success-sec" style="display: none; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
+                    <h3 style="font-size: 1.6rem; color: var(--success); margin-bottom: 0.5rem;">Booking Confirmed!</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Your tickets have been issued and sent to your email.</p>
+                    
+                    <!-- Wallet Pass design -->
+                    <div class="ticket-wallet">
+                        <div class="ticket-header-wallet">
+                            <span class="ticket-logo">🎟️ LaraEventTickets</span>
+                            <span style="font-size: 0.8rem; color: #a5b4fc; font-weight: bold;">ADMIT ONE</span>
+                        </div>
+                        <div class="ticket-body-wallet">
+                            <h4 id="receipt-event-title" class="ticket-title-wallet">Event Title</h4>
+                            <div class="ticket-info-grid">
+                                <div class="info-block">
+                                    <label>Date & Time</label>
+                                    <p id="receipt-date">Sep 15, 2026</p>
+                                </div>
+                                <div class="info-block">
+                                    <label>Venue</label>
+                                    <p id="receipt-venue">San Francisco</p>
+                                </div>
+                                <div class="info-block">
+                                    <label>Attendee</label>
+                                    <p id="receipt-email">attendee@email.com</p>
+                                </div>
+                                <div class="info-block">
+                                    <label>Tiers Purchased</label>
+                                    <p id="receipt-details">General Admission</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ticket-barcode-sec">
+                            <!-- SVG Render of standard 1D barcode -->
+                            <svg class="barcode-svg" viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" width="2" height="20" fill="white"/>
+                                <rect x="3" width="1" height="20" fill="white"/>
+                                <rect x="5" width="3" height="20" fill="white"/>
+                                <rect x="9" width="1" height="20" fill="white"/>
+                                <rect x="11" width="2" height="20" fill="white"/>
+                                <rect x="14" width="4" height="20" fill="white"/>
+                                <rect x="19" width="1" height="20" fill="white"/>
+                                <rect x="21" width="2" height="20" fill="white"/>
+                                <rect x="24" width="2" height="20" fill="white"/>
+                                <rect x="27" width="1" height="20" fill="white"/>
+                                <rect x="29" width="3" height="20" fill="white"/>
+                                <rect x="33" width="4" height="20" fill="white"/>
+                                <rect x="38" width="1" height="20" fill="white"/>
+                                <rect x="40" width="2" height="20" fill="white"/>
+                                <rect x="43" width="1" height="20" fill="white"/>
+                                <rect x="45" width="3" height="20" fill="white"/>
+                                <rect x="49" width="2" height="20" fill="white"/>
+                                <rect x="52" width="4" height="20" fill="white"/>
+                                <rect x="57" width="1" height="20" fill="white"/>
+                                <rect x="59" width="2" height="20" fill="white"/>
+                                <rect x="62" width="1" height="20" fill="white"/>
+                                <rect x="64" width="3" height="20" fill="white"/>
+                                <rect x="68" width="2" height="20" fill="white"/>
+                                <rect x="71" width="4" height="20" fill="white"/>
+                                <rect x="76" width="1" height="20" fill="white"/>
+                                <rect x="78" width="2" height="20" fill="white"/>
+                                <rect x="81" width="1" height="20" fill="white"/>
+                                <rect x="83" width="3" height="20" fill="white"/>
+                                <rect x="87" width="2" height="20" fill="white"/>
+                                <rect x="90" width="4" height="20" fill="white"/>
+                                <rect x="95" width="2" height="20" fill="white"/>
+                                <rect x="98" width="2" height="20" fill="white"/>
+                            </svg>
+                            <span id="receipt-code" style="font-family: monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: white;">TXN-88A9F1D</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" style="background: var(--bg-tertiary); box-shadow: none; border: 1px solid var(--border-color); margin-top: 1rem;" onclick="closeModals()">
+                        Done, Back to Events
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content" style="max-width: 420px;">
+            <button class="modal-close" onclick="closeModals()">&times;</button>
+            <div class="modal-body" style="padding: 2.5rem 2rem;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔒</div>
+                    <h2>Admin Portal Login</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Use standard credentials below to sign in</p>
+                </div>
+
+                <form onsubmit="handleLoginSubmit(event)">
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-control" value="admin@admin.com" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" value="password" required>
+                    </div>
+
+                    <div id="login-errors" class="alert alert-danger" style="display: none; padding: 0.8rem; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                        <span>Sign In</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Foot -->
+    <footer style="border-top: 1px solid var(--border-color); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 4rem;">
+        <p>&copy; 2026 LaraEventTickets Project. Licensed under MIT. Powered by QuickAdminPanel Laravel & Static Prototype.</p>
+    </footer>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+    <script>
+        // Init landing page
+        document.addEventListener('DOMContentLoaded', () => {
+            initLandingPage();
+        });
+
+        function openLoginModal() {
+            document.getElementById('login-modal').style.display = 'flex';
+            document.getElementById('login-errors').style.display = 'none';
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            const errorBox = document.getElementById('login-errors');
+
+            if (AppState.login(email, pass)) {
+                window.location.href = 'dashboard.html';
+            } else {
+                errorBox.textContent = 'Invalid email or password. Please use admin@admin.com / password.';
+                errorBox.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
